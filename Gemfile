@@ -6,7 +6,7 @@ gem 'rails-api'
 gem 'pg'
 
 gem 'bcrypt', '~> 3.1.7'
-
+gem 'neo4j'
 
 group :development do
   gem 'spring'
