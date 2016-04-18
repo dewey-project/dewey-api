@@ -7,7 +7,6 @@ class Course < ActiveRecord::Base
   validates :department_id, presence: true
   validates :code, presence: true
 
-  belongs_to :school
   belongs_to :department
 
   # Return the abbreviation for the course
