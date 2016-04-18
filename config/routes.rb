@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   scope 'api', module: 'v1' do
     get 'resources' => 'resources#index'
 
+    post 'register'  => 'registrations#create'
+
     scope 'schools' do
       get '/'            => 'schools#index',         as: :schools
       get '/:id'         => 'schools#show',          as: :school
