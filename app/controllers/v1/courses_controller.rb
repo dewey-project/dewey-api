@@ -7,30 +7,6 @@ class V1::CoursesController < ApplicationController
     @course = Course.includes(:department, :school).find(params[:id])
   end
 
-  def create
-    @course = Course.new(allowed_params)
-    if @course.save
-      render json: @course
-    else
-      render json: @course.errors
-    end
-  end
-
-  def update
-    @course = Course.find(params[:id])
-    if @course.udpate(allowed_params)
-      render json: @course
-    else
-      render json: @course.errors
-    end
-  end
-
-  def destroy
-    @course = Course.find(params[:id])
-    @course.destroy
-    render status: 200
-  end
-
   private
 
   def allowed_params
