@@ -5,6 +5,7 @@ gem 'rails', '4.2.5.2'
 gem 'rails-api'
 gem 'pg'
 
+gem 'jbuilder'
 gem 'bcrypt', '~> 3.1.7'
 gem 'neo4j'
 

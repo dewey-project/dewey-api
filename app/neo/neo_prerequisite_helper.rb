@@ -1,10 +1,10 @@
 module NeoPrerequisiteHelper
   class << self
     def included(base)
-      define_method :prerequistes do |opts={}|
+      define_method :prerequisites do |opts={}|
         node = get_course_node(self)
         course_ids = node.prerequisites(opts).to_a.map(&:course_id)
-        Course.find_by(id: course_ids) || []
+        Course.where(id: course_ids)
       end
 
       define_method :add_prerequisite do |course|
