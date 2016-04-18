@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get 'resources' => 'resources#index'
 
     post 'register'  => 'registrations#create'
+    post 'getToken'  => 'tokens#create'
 
     scope 'schools' do
       get '/'            => 'schools#index',         as: :schools

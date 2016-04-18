@@ -10,6 +10,7 @@ gem 'neo4j'
 gem 'jbuilder'
 gem 'bcrypt', '~> 3.1.7'
 gem 'reform'
+gem 'jwt'
 
 group :development do
   gem 'spring'

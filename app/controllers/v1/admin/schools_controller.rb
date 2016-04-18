@@ -1,4 +1,6 @@
 class V1::Admin::SchoolsController < ApplicationController
+  before_action :require_token!
+  
   def create
     @school = School.new(allowed_params)
     if @school.save

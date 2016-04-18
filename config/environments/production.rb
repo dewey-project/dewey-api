@@ -1,6 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # User JwtDecoder Middlware to decode JSON Web Tokens
+  config.middleware.use JwtDecoder
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 

@@ -1,4 +1,6 @@
 class V1::Admin::CoursesController < ApplicationController
+  before_action :require_token!
+
   def create
     @course = Course.new(allowed_params)
     if @course.save

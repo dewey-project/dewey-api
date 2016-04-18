@@ -1,4 +1,6 @@
 class V1::Admin::DepartmentsController < ApplicationController
+  before_action :require_token!
+  
   def create
     @department = Department.new(allowed_params)
     if @department.save
