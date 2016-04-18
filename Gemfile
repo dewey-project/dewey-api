@@ -5,6 +5,7 @@ gem 'rails', '4.2.5.2'
 gem 'rails-api'
 
 gem 'pg'
+gem 'pg_search'
 gem 'neo4j'
 
 gem 'jbuilder'

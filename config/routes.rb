@@ -5,44 +5,57 @@ Rails.application.routes.draw do
     post 'register'  => 'registrations#create'
     post 'getToken'  => 'tokens#create'
 
-    scope 'schools' do
-      get '/'            => 'schools#index',         as: :schools
-      get '/:id'         => 'schools#show',          as: :school
-      get '/:id/courses' => 'schools/courses#index', as: :school_courses
+    resources :schools, only: [:index, :show] do
+      scope module: 'schools' do
+        member do
+          get 'courses' => 'courses#index', as: :courses
+        end
+
+        collection do
+          post 'search' => 'search#index', as: :search
+        end
+      end
     end
 
-    scope 'departments' do
-      get '/'            => 'departments#index',         as: :departments
-      get '/:id'         => 'departments#show',          as: :department
-      get '/:id/courses' => 'departments/courses#index', as: :department_courses
+    resources :departments, only: [:index, :show] do
+      scope module: 'departments' do
+        member do
+          get 'courses' => 'courses#index', as: :courses
+        end
+
+        collection do
+          post 'search' => 'search#index', as: :search
+        end
+      end
     end
 
-    scope 'courses' do
-      get '/'                  => 'courses#index', as: :courses
-      get '/:id'               => 'courses#show',  as: :course
-      get '/:id/prerequisites/graph' => 'courses/prerequisites#index', as: :course_prerequisite_graph
-      get '/:id/prerequisites' => 'courses/prerequisites#show', as: :course_prerequisites
+    resources :courses, only: [:index, :show] do
+      scope module: 'courses' do
+        member do
+          get 'prerequisites/graph' => 'prerequisites#index', as: :prerequisite_graph
+          get 'prerequisites'  => 'prerequisites#show', as: :prerequisites
+        end
+
+        collection do
+          post 'search' => 'search#index', as: :search
+        end
+      end
     end
 
-    scope 'admin/schools', module: 'admin' do
-      post   '/'         => 'schools#create'
-      post   '/schools/:id/departments' => 'departments#create', as: :new_school_department
-      put    '/:id'      => 'schools#update'
-      patch  '/:id'      => 'schools#update'
-      delete '/:id'      => 'schools#destroy'
-    end
+    scope 'admin', module: 'admin' do
+      resources :schools, only: [:create, :update, :destroy] do
+        member do
+          post 'departments'  => 'departments#create', as: :new_department
+        end
+      end
 
-    scope 'admin/departments', module: 'admin' do
-      post   'departments/:id/course' => 'courses#create', as: :new_department_course
-      put    '/:id'      => 'departments#update'
-      patch  '/:id'      => 'departments#update'
-      delete '/:id'      => 'departments#destroy'
-    end
+      resources :departments, only: [:create, :update, :destroy] do
+        member do
+          post 'courses' => 'courses#create', as: :new_course
+        end
+      end
 
-    scope 'admin/courses', module: 'admin' do
-      put     '/:id'               => 'courses#update'
-      patch   '/:id'               => 'courses#update'
-      delete  '/:id'               => 'courses#destroy'
+      resources :courses, only: [:update, :destroy]
     end
   end
 end

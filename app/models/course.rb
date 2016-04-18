@@ -2,8 +2,12 @@ class Course < ActiveRecord::Base
   # Provides methods to add, remove and view prequisites
   # for this course.
   include NeoPrerequisiteHelper
+  include PgSearch
 
-  validates :school_id, presence: true
+  pg_search_scope :search,
+                  against: [:code, :title],
+                  using: { tsearch: { prefix: true }}
+
   validates :department_id, presence: true
   validates :code, presence: true
 
