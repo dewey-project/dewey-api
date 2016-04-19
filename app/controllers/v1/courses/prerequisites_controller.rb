@@ -1,7 +1,7 @@
 class V1::Courses::PrerequisitesController < ApplicationController
   def index
     @course = Course.find(params[:id])
-    @prerequisites = @course.prerequisites(rel_length: :any)
+    @prerequisites = @course.prerequisite_graph
   end
 
   def show
