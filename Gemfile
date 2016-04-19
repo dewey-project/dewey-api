@@ -13,6 +13,10 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'reform'
 gem 'jwt'
 
+gem 'traits', github: 'jdmorlan/traits'
+gem 'pry'
+gem 'minitest-reporters'
+
 group :development do
   gem 'spring'
 end
