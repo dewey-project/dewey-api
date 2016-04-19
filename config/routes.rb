@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   scope 'api', module: 'v1' do
-    get 'resources' => 'resources#index'
+    root 'resources#index'
 
     post 'register'  => 'registrations#create'
     post 'getToken'  => 'tokens#create'
