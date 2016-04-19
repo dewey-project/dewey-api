@@ -20,7 +20,7 @@ class CoursesTest < ActionDispatch::IntegrationTest
     get "/api/courses/#{@algebra.id}", nil, @headers
 
     json_body = JSON.parse(response.body)
-    refute json_body["data"].nil?
+    refute json_body["data"].empty?
   end
 
   test 'can search for courses' do
