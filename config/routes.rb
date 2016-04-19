@@ -55,7 +55,14 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :courses, only: [:update, :destroy]
+      resources :courses, only: [:update, :destroy] do
+        scope module: 'courses' do
+          member do
+            post   'prerequisites/:course_id' => 'prerequisites#create'
+            delete 'prerequisites/:course_id' => 'prerequisites#destroy'
+          end
+        end
+      end
     end
   end
 end

@@ -1,5 +1,5 @@
 json.links do
-  json.self course_prerequisites_url(@course.id)
+  json.self prerequisites_course_url(@course.id)
   json.course course_url(@course.id)
 end
 

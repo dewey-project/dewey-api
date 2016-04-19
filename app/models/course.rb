@@ -1,6 +1,4 @@
 class Course < ActiveRecord::Base
-  # Provides methods to add, remove and view prequisites
-  # for this course.
   include NeoPrerequisiteHelper
   include PgSearch
 
