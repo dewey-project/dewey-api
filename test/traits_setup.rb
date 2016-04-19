@@ -5,6 +5,12 @@ Traits.build do
 end
 
 Traits.build do
+  model(:texas_tech) do
+    attribute(:title, 'Texas Tech')
+  end
+end
+
+Traits.build do
   model(:math_department) do
     attribute(:title, 'Mathematics')
     attribute(:abbreviation, 'MATH')
