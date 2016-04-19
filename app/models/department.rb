@@ -1,15 +1,16 @@
 class Department < ActiveRecord::Base
   include PgSearch
 
-  pg_search_scope :search,
-                  against: [:title],
+  # Scopes
+  scope :by_school, ->(id) { where(school_id: id) }
+  pg_search_scope :search, against: [:title],
                   using: { tsearch: { prefix: true }}
 
-  scope :by_school, ->(school_id) { where(school_id: school_id) }
-
+  # Validations
   validates :title, presence: true
   validates :abbreviation, presence: true
 
+  # Associations
   belongs_to :school
   has_many :courses
 end
