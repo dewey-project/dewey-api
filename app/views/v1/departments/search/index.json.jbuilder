@@ -9,4 +9,9 @@ json.data @departments do |department|
 
   json.id department.id
   json.title department.title
+
+  json.school do
+    json.id department.school.id
+    json.title department.school.title
+  end
 end
