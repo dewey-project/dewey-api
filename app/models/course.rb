@@ -6,6 +6,8 @@ class Course < ActiveRecord::Base
                   against: [:code, :title],
                   using: { tsearch: { prefix: true }}
 
+  scope :by_department, -> (id) { where(department_id: id) }
+
   validates :department_id, presence: true
   validates :code, presence: true
 

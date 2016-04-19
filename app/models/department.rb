@@ -5,6 +5,8 @@ class Department < ActiveRecord::Base
                   against: [:title],
                   using: { tsearch: { prefix: true }}
 
+  scope :by_school, ->(school_id) { where(school_id: school_id) }
+
   validates :title, presence: true
   validates :abbreviation, presence: true
 
