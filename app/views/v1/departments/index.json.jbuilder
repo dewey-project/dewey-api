@@ -5,7 +5,7 @@ end
 json.data @departments do |department|
   json.links do
     json.self department_url(department.id)
-    json.courses department_courses_url(department.id)
+    json.courses courses_department_url(department.id)
   end
 
   json.id department.id

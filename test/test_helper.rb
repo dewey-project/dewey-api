@@ -10,4 +10,8 @@ require 'traits_setup'
 class ActiveSupport::TestCase
   include Traits::Syntax
   fixtures :all
+
+  def get_json_response
+    HashWithIndifferentAccess.new(JSON.parse(response.body))
+  end
 end
