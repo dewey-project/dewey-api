@@ -59,7 +59,7 @@ class Course < ActiveRecord::Base
   def get_course_node(course)
     node = CourseNode.find_by(course_id: course.id)
     return node unless node.nil?
-    CourseNode.new(course_id: course.id, school_id: course.school_id)
+    CourseNode.new(course_id: course.id)
   end
 
   def add_course_node_prerequisite(course)
