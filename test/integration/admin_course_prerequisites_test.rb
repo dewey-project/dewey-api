@@ -20,7 +20,10 @@ class AdminCoursePrerequisitesTest < ActionDispatch::IntegrationTest
   end
 
   test 'can add prerequisite to course' do
-    post "/api/admin/courses/#{@trig.id}/prerequisites/#{@algebra.id}", nil, @headers
+    request_body = { data: { course_id: @trig.id,
+                             prerequisite_ids: [@algebra.id] }}
+
+    post '/api/admin/courses/prerequisites', request_body, @headers
 
     algebra_node = CourseNode.find_by(course_id: @algebra.id)
     trig_node = CourseNode.find_by(course_id: @trig.id)

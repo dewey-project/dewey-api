@@ -25,8 +25,8 @@ class CoursePrerequisitesTest < ActionDispatch::IntegrationTest
   end
 
   test 'can view prerequisite graph for course' do
-    @trig.add_prerequisite(@algebra)
-    @calculus.add_prerequisite(@trig)
+    @trig.add_prerequisites(@algebra)
+    @calculus.add_prerequisites(@trig)
 
     get "/api/courses/#{@calculus.id}/prerequisites/graph", nil, @headers
 

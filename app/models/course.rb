@@ -34,16 +34,10 @@ class Course < ActiveRecord::Base
   end
 
   # Add a prerequisite to ActiveRecord and Neo4j
-  def add_prerequisite(course)
-    source_school = self.department.school
-    target_school = course.department.school
-
-    if source_school != target_school
-      raise CourseWithoutSameSchoolError
-    end
-
-    self.prerequisites << course
-    add_course_node_prerequisite(course)
+  def add_prerequisites(*courses)
+    courses.flatten!
+    self.prerequisites << courses
+    add_course_node_prerequisites(courses)
   end
 
   # Remove a prerequisite from ActiveRecord and Neo4j
@@ -62,12 +56,16 @@ class Course < ActiveRecord::Base
     CourseNode.new(course_id: course.id)
   end
 
-  def add_course_node_prerequisite(course)
-    source_node = get_course_node(self)
-    target_node = get_course_node(course)
+  def get_course_nodes(courses)
+    courses.map { |course| get_course_node(course) }
+  end
 
-    source_node.prerequisites << target_node
-    source_node.save
+  def add_course_node_prerequisites(courses)
+    course_node = get_course_node(self)
+    prerequisite_nodes = get_course_nodes(courses)
+
+    course_node.prerequisites << prerequisite_nodes
+    course_node.save
   end
 
   def remove_course_node_prerequisite(course)

@@ -1,11 +1,11 @@
 json.data do
-  json.source do
-    json.id @source.id
-    json.title @source.title
+  json.course do
+    json.id @course.id
+    json.title @course.title
   end
 
-  json.target do
-    json.id @source.id
-    json.title @source.title
+  json.prerequisites @prerequisites do |course|
+    json.id course.id
+    json.title course.title
   end
 end

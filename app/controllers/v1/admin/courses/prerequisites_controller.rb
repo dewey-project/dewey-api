@@ -2,14 +2,17 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
   before_action :require_token!
 
   def create
-    @source = Course.find_by(id: params[:id])
-    @target = Course.find_by(id: params[:course_id])
+    @course = Course.find_by(id: allowed_params[:course_id])
 
-    errors = generate_errors(@source, @target)
+    prerequisite_ids = allowed_params[:prerequisite_ids].map(&:to_i)
+    @prerequisites = Course.where(id: prerequisite_ids).to_a
+
+
+    errors = generate_errors(@course.id, prerequisite_ids, @prerequisites.map(&:id))
     if errors
       render json: errors, status: 404
     else
-      @source.add_prerequisite(@target)
+      @course.add_prerequisites(@prerequisites)
       render :create, status: 200
     end
   end
@@ -18,7 +21,7 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
     @source = Course.find_by(id: params[:id])
     @target = Course.find_by(id: params[:course_id])
 
-    errors = generate_errors(@source, @target)
+    errors = generate_errors(@source.id, [@target.id], [params[:course_id]])
     if errors
       render json: errors, status: 404
     else
@@ -29,18 +32,27 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
 
   private
 
-  def generate_errors(source, target)
-    if source && target
+  def allowed_params
+    params.require(:data).permit(:course_id, prerequisite_ids: [])
+  end
+
+  def generate_errors(course_id, expected_ids, actual_ids)
+    actual_ids.map!(&:to_i)
+    prerequisites_match = expected_ids == actual_ids
+
+    if course_id && prerequisites_match
       return nil
     end
 
     errors = {}
-    if source.nil?
-      errors[:source] = "Could not find source course"
-    end
+    errors[:course] = "Could not find source course" if course_id.nil?
 
-    if target.nil?
-      errors[:target] = "Could not find target course"
+    if !prerequisites_match
+      errors[:prerequisites] = []
+      prerequisite_intersection = expected_ids - actual_ids
+      errors[:prerequisites] = prerequisite_intersection.map do |id|
+        "Could not find course with id of #{id}"
+      end
     end
 
     return errors
