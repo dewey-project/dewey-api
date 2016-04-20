@@ -12,24 +12,20 @@ class CoursesTest < ActionDispatch::IntegrationTest
   test 'can view all courses' do
     get '/api/courses', nil, @headers
 
-    json_body = JSON.parse(response.body)
-    assert json_body["data"].size == 1
+    assert get_json_response[:data].size == 1
   end
 
   test 'can view single course' do
     get "/api/courses/#{@algebra.id}", nil, @headers
 
-    json_body = JSON.parse(response.body)
-    refute json_body["data"].empty?
+    refute get_json_response[:data].empty?
   end
 
   test 'can search for courses' do
     request_body = { data: { term: 'Alg' }}
-
     post '/api/courses/search', request_body, @headers
 
-    json_body = JSON.parse(response.body)
-    refute json_body["data"].empty?
+    refute get_json_response[:data].empty?
   end
 
   test 'can limit search by department' do
@@ -39,7 +35,6 @@ class CoursesTest < ActionDispatch::IntegrationTest
     request_body = { data: { term: 'Alg', department_id: english.id }}
     post '/api/courses/search', request_body, @headers
 
-    json_body = JSON.parse(response.body)
-    assert_equal 1, json_body["data"].size
+    assert_equal 1, get_json_response[:data].size
   end
 end
