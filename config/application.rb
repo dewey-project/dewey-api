@@ -13,6 +13,10 @@ module DeweyApi
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    Dir[Rails.root.join("config/routes/*.rb")].each do |file|
+      config.paths["config/routes.rb"] << file
+    end
+
     # Use Gzip to compress responses
     config.middleware.use Rack::Deflater
 
