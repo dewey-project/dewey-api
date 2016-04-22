@@ -1,5 +1,5 @@
 json.links do
-  json.self search_courses_url
+  json.self  courses_search_url
 end
 
 json.data @courses do |course|

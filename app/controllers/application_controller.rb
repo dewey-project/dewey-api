@@ -1,6 +1,18 @@
 class ApplicationController < ActionController::API
   before_action do
-    @token = Token.new(request.env['jwt.token'])
+    # Make sure that all responses are compressed
+    # Checkout Rack::Deflator middleware for more
+    # details
+    if !request.env.key?('HTTP_ACCEPT_ENCODING')
+      request.env['HTTP_ACCEPT_ENCODING'] = 'gzip'
+    end
+
+    # Make sure that all requests coming are considered
+    # application/json
+    request.format = :json
+
+    auth_token = request.env['jwt.token']
+    @token = auth_token.nil? ? nil : Token.new(auth_token)
   end
 
   def require_token!

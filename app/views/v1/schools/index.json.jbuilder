@@ -1,3 +1,5 @@
+json.prettify!
+
 json.links do
   json.self schools_url
 end
@@ -5,7 +7,7 @@ end
 json.data @schools do |school|
   json.links do
     json.self school_url(school.id)
-    json.courses courses_school_url(school.id)
+    json.courses school_courses_url(school.id)
   end
 
   json.id school.id

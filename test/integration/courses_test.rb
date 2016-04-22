@@ -9,8 +9,8 @@ class CoursesTest < ActionDispatch::IntegrationTest
     @algebra = Course.create(traits(:algebra, department: @department))
   end
 
-  test 'can view all courses' do
-    get '/api/courses', nil, @headers
+  test 'can view all courses for a department' do
+    get "/api/departments/#{@department.id}/courses", nil, @headers
 
     assert get_json_response[:data].size == 1
   end
@@ -22,8 +22,7 @@ class CoursesTest < ActionDispatch::IntegrationTest
   end
 
   test 'can search for courses' do
-    request_body = { data: { term: 'Alg' }}
-    post '/api/courses/search', request_body, @headers
+    get '/api/courses/search?q=alg', nil, @headers
 
     refute get_json_response[:data].empty?
   end
@@ -32,8 +31,8 @@ class CoursesTest < ActionDispatch::IntegrationTest
     english = Department.create(traits(:english_department, school: @school))
     Course.create(traits(:algebra, department: english))
 
-    request_body = { data: { term: 'Alg', department_id: english.id }}
-    post '/api/courses/search', request_body, @headers
+    url = "/api/courses/search?q=alg&department_id=#{@department.id}"
+    get url, nil, @headers
 
     assert_equal 1, get_json_response[:data].size
   end

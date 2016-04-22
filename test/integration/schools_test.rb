@@ -21,9 +21,7 @@ class SchoolsTest < ActionDispatch::IntegrationTest
   end
 
   test 'can search schools' do
-    request_body = { data: { term: 'Lone' }}
-    post '/api/schools/search', request_body, @headers
-
+    get '/api/schools/search?q=Lonestar', nil, @headers
     assert_equal 1, get_json_response[:data].size
   end
 end

@@ -7,7 +7,6 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
     prerequisite_ids = allowed_params[:prerequisite_ids].map(&:to_i)
     @prerequisites = Course.where(id: prerequisite_ids).to_a
 
-
     errors = generate_errors(@course.id, prerequisite_ids, @prerequisites.map(&:id))
     if errors
       render json: errors, status: 404

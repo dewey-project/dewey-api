@@ -11,8 +11,8 @@ class DepartmentsTest < ActionDispatch::IntegrationTest
     @english = Department.create(traits(:english_department, school: @lonestar))
   end
 
-  test 'view all the departments' do
-    get '/api/departments', nil, @headers
+  test 'view all the departments for school' do
+    get "/api/schools/#{@lonestar.id}/departments", nil, @headers
 
     assert_equal 2, get_json_response[:data].size
   end
@@ -24,17 +24,16 @@ class DepartmentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'can search departments' do
-    request_body = { data: { term: 'Math' }}
-    post '/api/departments/search', request_body, @headers
+    Department.create(traits(:math_department, school: @texas_tech))
+    get '/api/departments/search?q=Math', nil, @headers
 
-    assert_equal 1, get_json_response[:data].size
+    assert_equal 2, get_json_response[:data].size
   end
 
   test 'can limit search of departments by school id' do
     Department.create(traits(:math_department, school: @texas_tech))
-
-    request_body = { data: { term: 'Math', school_id: @lonestar.id }}
-    post '/api/departments/search', request_body, @headers
+    url = "/api/departments/search?q=Math&school_id=#{@lonestar.id}"
+    get url, nil, @headers
 
     assert_equal 1, get_json_response[:data].size
   end

@@ -12,6 +12,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def get_json_response
-    HashWithIndifferentAccess.new(JSON.parse(response.body))
+    decompressed_body = ActiveSupport::Gzip.decompress(response.body)
+    HashWithIndifferentAccess.new(JSON.parse(decompressed_body))
   end
 end

@@ -11,6 +11,7 @@ class Course < ActiveRecord::Base
 
   # Validations
   validates :department_id, presence: true
+  validates :title, presence: true
   validates :code, presence: true
 
   # Associations

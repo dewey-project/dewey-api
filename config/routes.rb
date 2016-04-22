@@ -5,42 +5,32 @@ Rails.application.routes.draw do
     post 'register'  => 'registrations#create'
     post 'getToken'  => 'tokens#create'
 
-    resources :schools, only: [:index, :show] do
-      scope module: 'schools' do
-        member do
-          get 'courses' => 'courses#index', as: :courses
-        end
-
-        collection do
-          post 'search' => 'search#index', as: :search
-        end
-      end
+    # School Routes
+    scope 'schools', module: 'schools' do
+      get 'search' => 'search#index', as: :schools_search
+      get '/:id/departments' => 'departments#index', as: :school_departments
+      get '/:id/courses' => 'courses#index', as: :school_courses
     end
 
-    resources :departments, only: [:index, :show] do
-      scope module: 'departments' do
-        member do
-          get 'courses' => 'courses#index', as: :courses
-        end
+    get 'schools' => 'schools#index', as: :schools
+    get 'schools/:id' => 'schools#show', as: :school
 
-        collection do
-          post 'search' => 'search#index', as: :search
-        end
-      end
+    # Department Routes
+    scope 'departments', module: 'departments' do
+      get 'search' => 'search#index', as: :departments_search
+      get '/:id/courses' => 'courses#index', as: :department_courses
     end
 
-    resources :courses, only: [:index, :show] do
-      scope module: 'courses' do
-        member do
-          get 'prerequisites/graph' => 'prerequisites#index', as: :prerequisite_graph
-          get 'prerequisites'  => 'prerequisites#show', as: :prerequisites
-        end
+    get 'departments/:id' => 'departments#show', as: :department
 
-        collection do
-          post 'search' => 'search#index', as: :search
-        end
-      end
+    # Course Routes
+    scope 'courses', module: 'courses' do
+      get 'search' => 'search#index', as: :courses_search
+      get '/:id/prerequisites/graph' => 'prerequisites#index', as: :course_prerequisite_graph
+      get '/:id/prerequisites' => 'prerequisites#show', as: :course_prerequisites
     end
+
+    get 'courses/:id' => 'courses#show', as: :course
 
     scope 'admin', module: 'admin' do
       resources :schools, only: [:create, :update, :destroy] do

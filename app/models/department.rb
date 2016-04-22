@@ -7,6 +7,7 @@ class Department < ActiveRecord::Base
                   using: { tsearch: { prefix: true }}
 
   # Validations
+  validates :school_id, presence: true
   validates :title, presence: true
   validates :abbreviation, presence: true
 

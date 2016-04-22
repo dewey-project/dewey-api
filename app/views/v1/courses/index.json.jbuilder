@@ -7,7 +7,7 @@ json.data @courses do |course|
     json.self course_url(course.id)
     json.department department_url(course.department.id)
     json.school school_url(course.department.school.id)
-    json.prerequisites prerequisites_course_url(course.id)
+    json.prerequisites course_prerequisites_url(course.id)
   end
 
   json.id course.id

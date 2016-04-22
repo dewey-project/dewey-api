@@ -1,8 +1,11 @@
 class V1::Admin::DepartmentsController < ApplicationController
   before_action :require_token!
-  
+
   def create
+    @school = School.find(params[:id])
     @department = Department.new(allowed_params)
+    @department.school = @school
+
     if @department.save
       render 'create'
     else
@@ -28,6 +31,8 @@ class V1::Admin::DepartmentsController < ApplicationController
   private
 
   def allowed_params
-    params.require(:data).permit(:title, :abbreviation, :description)
+    params
+      .require(:data)
+      .permit(:title, :abbreviation, :description)
   end
 end
