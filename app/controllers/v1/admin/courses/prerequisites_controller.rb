@@ -1,6 +1,9 @@
 class V1::Admin::Courses::PrerequisitesController < ApplicationController
   before_action :require_token!
 
+  # Link one or more courses as prerequsites for another course.
+  # All the courses must already exist in the database before
+  # they can be linked.
   def create
     @course = Course.find_by(id: allowed_params[:course_id])
 
@@ -16,6 +19,8 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
     end
   end
 
+  # Remove link between one or more courses as a prerequsites for
+  # another course.
   def destroy
     @source = Course.find_by(id: params[:id])
     @target = Course.find_by(id: params[:course_id])
@@ -35,18 +40,16 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
     params.require(:data).permit(:course_id, prerequisite_ids: [])
   end
 
+  # TODO - clean up or extract the method
   def generate_errors(course_id, expected_ids, actual_ids)
     actual_ids.map!(&:to_i)
     prerequisites_match = expected_ids == actual_ids
 
-    if course_id && prerequisites_match
-      return nil
-    end
+    return nil if course_id && prerequisites_match
 
-    errors = {}
-    errors[:course] = "Could not find source course" if course_id.nil?
+    errors = Hash[course: 'Could not find source course'] if course_id.nil?
 
-    if !prerequisites_match
+    unless prerequisites_match
       errors[:prerequisites] = []
       prerequisite_intersection = expected_ids - actual_ids
       errors[:prerequisites] = prerequisite_intersection.map do |id|
@@ -54,6 +57,6 @@ class V1::Admin::Courses::PrerequisitesController < ApplicationController
       end
     end
 
-    return errors
+    errors
   end
 end

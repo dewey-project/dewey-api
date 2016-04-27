@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
     # Make sure that all responses are compressed
     # Checkout Rack::Deflator middleware for more
     # details
-    if !request.env.key?('HTTP_ACCEPT_ENCODING')
+    unless request.env.key?('HTTP_ACCEPT_ENCODING')
       request.env['HTTP_ACCEPT_ENCODING'] = 'gzip'
     end
 
@@ -16,9 +16,10 @@ class ApplicationController < ActionController::API
   end
 
   def require_token!
-    unless @token.present?
-      error_json = { message: 'No token in HTTP_AUTHORIZATION header' }
-      render json: error_json, status: 401
-    end
+    render json: no_token_error_message, status: 401 unless @token.present?
+  end
+
+  def no_token_error_message
+    { message: 'No token in HTTP_AUTHORIZATION header' }
   end
 end
